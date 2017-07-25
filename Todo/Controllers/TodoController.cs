@@ -21,19 +21,24 @@ namespace Todo.Controllers
             if (_context.TodoItems.Count() == 0)
             {
                 _context.TodoItems.Add(new TodoItem { Name = "Item1" });
+                _context.SaveChanges();
             }
+
         }
 
         [HttpGet]
         public IEnumerable<TodoItem> GetAll()
         {
+            _context.TodoItems.Add(new TodoItem { Name = "Item1"});
+            List<TodoItem> list = _context.TodoItems.ToList();
+            _context.SaveChanges();
             return _context.TodoItems.ToList();
         }
 
         [HttpGet("{id}", Name = "GetTodo")]
         public IActionResult GetById(long id)
         {
-            var item = _context.TodoItems.FirstOrDefault();
+            var item = _context.TodoItems.FirstOrDefault(t => t.Id == id);
             if(item == null)
             {
                 return NotFound(); // 404
